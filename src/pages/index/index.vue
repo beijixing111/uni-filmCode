@@ -1,29 +1,120 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
+	<view class="home-view" >
+		<Banner :list="banners" />
+		<!-- <NewProduct /> -->
+		<view class="film-container">
+			<view class="hot">热门推荐</view>
+			<view class="film-list">
+				<FilmItem v-for="film in filmList" :film='film' :key="film.id" />
+			</view>
+
 		</view>
+		<!-- <button type="primary" @click="onSwitchTab">去个人中心</button>
+		<button @click="getToast">获取提示</button> -->
+		
 	</view>
 </template>
 
 <script>
+	import { homeData, homeBanner } from '@/api/home';
+	import NewProduct from './components/NewProduct';
+	import Banner from './components/Banner';
+	import FilmItem from './components/FilmItem';
+	// const app = getApp();
 	export default {
+		components: {
+			Banner,
+			FilmItem,
+			NewProduct
+		},
 		data() {
 			return {
-				title: 'Hello'
+				banners: [],
+				filmList: [],
+				loading: false, 
+				pageSize: 10,
+				page: 1
 			}
 		},
 		onLoad() {
+			this.loadHomeData();
+		},
 
+		onPullDownRefresh() {
+			console.log('开始下拉刷新');
+			this.loadHomeData();
+			setTimeout(() => {
+				console.log('stopPullDownRefresh');
+				uni.stopPullDownRefresh();
+			},2000);
 		},
 		methods: {
-
+			loadHomeData () {
+				this.getBanner();
+				this.getHomeData(); 
+			},
+			async getBanner() {
+				try {
+					const res = await homeBanner();
+					if(res.errorCode === 0){
+						this.banners = res.data.list;
+					}
+				} catch(err) {
+					console.log(err);
+				}
+				
+			},
+			getToast() {
+				uni.showToast({
+					icon: 'none',
+					title: '测试小酱油！'
+				});
+			},
+			onSwitchTab() {
+				uni.switchTab({
+					url: '/pages/mine/index'
+				});
+			},
+			async getHomeData() {
+				const params = {
+					page: this.page,
+      		pageSize: this.pageSize
+				};
+				const {errorCode, data} = await homeData();
+				if(errorCode === 0) {
+					this.filmList = data.filmList;
+				}
+				console.log(this.filmList[0]);
+			},
+			getUserInfo(e) {
+				console.log(e);
+				this.user = e.detail.userInfo;
+				console.log(this.user);
+			},
+			chooseAvatar(e) {
+				console.log(e.detail);
+				this.avatarUrl = e.detail.avatarUrl;
+			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.home-view{
+		/* height: 100vh; */
+		background: #f6f6f6;
+	}
+
+	.film-container{
+		/* padding: 30rpx0; */
+	}
+	.hot{
+		padding: 30rpx;
+		font-size: 32rpx;
+		color: #333;
+		font-weight: bold;
+	}
+
 	.content {
 		display: flex;
 		flex-direction: column;

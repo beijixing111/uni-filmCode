@@ -8,6 +8,14 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
+		},
+		created() {
+			this.getItemList();
+		},
+		methods: {
+			getItemList() {
+				console.log("getItemList");
+			}
 		}
 	}
 </script>

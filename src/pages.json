@@ -1,12 +1,77 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "影视欣赏",
+        "enablePullDownRefresh": true
 			}
-		}
+		},
+    {
+			"path": "pages/landing/index",
+			"style": {
+				"navigationBarTitleText": "Banner详情页"
+			}
+		},
+    {
+			"path": "pages/filmDetail/index",
+			"style": {
+				"navigationBarTitleText": "短视频详情"
+			}
+		},
+		{
+			"path": "pages/mine/index",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+    { 
+      "path": "pages/userinfo/index",
+			"style": {
+				"navigationBarTitleText": "用户画像"
+			}
+    },
+    { 
+      "path": "pages/scan/index",
+			"style": {
+				"navigationBarTitleText": "扫一扫"
+			}
+    }
 	],
+	"tabBar": {
+    "iconfontSrc":"static/iconfont.ttf",
+		"backgroundColor": "#F8F8F8",
+    "color": "#000000",
+    "selectedColor": "#f46b84",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/homeSelected.png",
+        "iconfont": {
+          "text": "\ue62e",
+          "selectedText": "\ue62e",
+          "fontSize": "20px",
+          "color": "#000000",
+          "selectedColor": "#f46b84"
+        }
+      },
+			{
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/geren.png",
+        "selectedIconPath": "static/tabbar/gerenSelected.png",
+        "iconfont": {
+          "text": "\ue607",
+          "selectedText": "\ue607",
+          "fontSize": "20px",
+          "color": "#000000",
+          "selectedColor": "#f46b84"
+        }
+      }
+    ]
+  },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
