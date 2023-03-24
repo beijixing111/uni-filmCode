@@ -4,7 +4,7 @@
 			@login="onLogin" @logout="onLogOut" />
 
 		<view class="group-bg">
-			<van-cell-group >
+			<!-- <van-cell-group >
 				<van-cell size="large" title="收藏" :value="starCount" is-link >
 					<van-icon slot="icon" size="18px" name="star-o" color="#f46b84" style="margin-right: 10rpx" />
 				</van-cell>
@@ -17,8 +17,10 @@
 				<van-cell size="large" title="壁纸" @click="goToWallpaper" is-link >
 					<van-icon slot="icon" size="18px" name="setting-o" color="#f46b84" style="margin-right: 10rpx" />
 				</van-cell>
-			</van-cell-group>
-			<!-- <button class="btn" @click="goToWallpaper" type="primary" size="small">壁 纸</button> -->
+			</van-cell-group> -->
+			<view style="padding: 10px;">
+				<button class="btn" @click="goToWallpaper" type="primary" size="small">壁 纸</button>
+			</view>
 		</view>
 		
 	</view>
@@ -26,16 +28,16 @@
 
 <script> 
 import UserCard from './components/UserCard';
-import VanCell from "@/wxcomponents/@vant/weapp/cell/index";
-import VanCellGroup from  "@/wxcomponents/@vant/weapp/cell-group/index";
-import VanIcon from "@/wxcomponents/@vant/weapp/icon/index";
+// import VanCell from "@/wxcomponents/@vant/weapp/cell/index";
+// import VanCellGroup from  "@/wxcomponents/@vant/weapp/cell-group/index";
+// import VanIcon from "@/wxcomponents/@vant/weapp/icon/index";
 export default {
 	name: 'mine',
 	components: {
 		UserCard,
-		VanCell,
-		VanCellGroup,
-		VanIcon
+		// VanCell,
+		// VanCellGroup,
+		// VanIcon
 	},
 	data() {
 		return {   

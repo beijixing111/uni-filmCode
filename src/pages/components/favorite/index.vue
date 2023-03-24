@@ -88,10 +88,10 @@ $favColor: #f46b84;
   }
   .sty{
 	  color: #ccc;
-	  font-size: 30px;
+	  font-size: 26px;
   }
   .sty-red{
-	  font-size: 30px;
+	  font-size: 26px;
 	color: $favColor;
   }
 }
