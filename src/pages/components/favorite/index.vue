@@ -1,18 +1,18 @@
 <template>
   <view class="fav-box">
-    <van-icon @click="onFavorite" size="26px" name="star-o" :color="isFav ? '#f46b84' : '#ccc'"/>
-	<!-- <text @click="onFavorite" v-show="!isFav" class="sty">☆</text>
-	<text @click="onFavorite" v-show="isFav" class="sty-red">★</text>  -->
+    <!-- <van-icon @click="onFavorite" size="26px" name="star-o" :color="isFav ? '#f46b84' : '#ccc'"/> -->
+	<text @click="onFavorite" v-show="!isFav" class="sty">☆</text>
+	<text @click="onFavorite" v-show="isFav" class="sty-red">★</text> 
     <text class="tnum" v-show="allfavNumber">{{ allfavNumber }}</text>
   </view>
 </template>
 
 <script>
-import VanIcon from "@/wxcomponents/@vant/weapp/icon/index";
+// import VanIcon from "@/wxcomponents/@vant/weapp/icon/index";
 // vant ui 在app 开发中不支持 
 export default {
   components:{
-    VanIcon 
+    // VanIcon 
   },
   props: {
     favId: Number,
