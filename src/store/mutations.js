@@ -7,7 +7,7 @@ import {cacheLocalUserInfo, cacheFavoriteList, getFavoriteList} from './cache';
 
 export default { 
   login(state, payload){
-    console.log(state, payload);
+    console.log("login", state, payload);
     state.userInfo = {
       ...state.userInfo,
       ...payload

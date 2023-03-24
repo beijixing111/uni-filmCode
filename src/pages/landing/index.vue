@@ -1,11 +1,8 @@
 <template>
-	<view class="landing" v-if="landingData">  
-    <view class="title">
-      {{landingData.title}}
-    </view> 
+	<view class="landing" v-if="landingData"> 
     <view class="desc">
       <view v-for="img in landingData.imgages" :key="img.id" class="img-box">
-        <image style="width: 100%" class="img-sty" :mode="'aspectFill'" :src="img.url"
+        <image @click="previewImage" style="width: 100%" class="img-sty" :mode="'aspectFill'" :src="img.url"
       ></image>
       </view>
       <view class="p">{{landingData.desc}}</view>
@@ -22,6 +19,7 @@
 		data() {
 			return {
 				title: '',
+        picUrl: 'https://s3.bmp.ovh/imgs/2023/02/08/714a1efeb76cd58c.png',
         landingData: null, 
 			}
 		},
@@ -34,7 +32,7 @@
         this.loading = true;
         try{
           // let landingData 
-          let title = '阿凡达2'; 
+          let title = '阿凡达2';  
           uni.setNavigationBarTitle({title});
           this.landingData = {
             title: '阿凡达2',
@@ -42,7 +40,7 @@
             imgages: [
               {
                 id: 1,
-                url: 'http://rmu89zvzr.hn-bkt.clouddn.com/banner/banner1.png?e=1670949267&token=r1zA0s9aSg5l0kMbkEeawshegh_gyTrgOj1z5lMJ:nseJmSpRYZewVm7OdB0Av7tNQbQ='
+                url: this.picUrl
               }
             ],
             videoUrl: ''
@@ -51,6 +49,12 @@
         }catch(err) {
           console.log(err);
         }
+      },
+      previewImage(){
+        uni.previewImage({
+          current: 0,
+          urls: [this.picUrl]
+        });
       }
 		}
 	}

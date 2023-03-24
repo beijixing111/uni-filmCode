@@ -6,7 +6,7 @@
           <image class="avatar" :src="avatarUrl || defaultAvatar"></image>
         </button>
       </view>
-      <input type="nickname" class="weui-input" :value="nickName" placeholder="请输入昵称" @input="changeVal" />
+      <input type="nickname" class="weui-input" :value="nickName" placeholder="请输入昵称" @input="changeVal" @change="changeVal"/>
     </view>
 
     <view>
@@ -43,11 +43,11 @@
         this.avatarUrl = e.detail.avatarUrl;
       },
       changeVal(e) {
-        console.log(e);
+        console.log("changeVal", e);
         this.nickName = e.target.value;
       },
       saveUserInfo() {
-        // console.log(this.avatarUrl, this.nickName);
+        console.log(this.avatarUrl, this.nickName);
         if(!this.avatarUrl){
           return uni.showToast({
             icon: 'none',
@@ -65,7 +65,7 @@
           nickName: this.nickName
         };
         try {
-          this.$store.commit('cacheUserInfo', userInfo);
+          this.$store.commit('login', userInfo);
           uni.navigateBack(1);
         } catch (e) { }
       }

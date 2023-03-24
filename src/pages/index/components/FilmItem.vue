@@ -1,5 +1,5 @@
 <template >
-  <view class="film-item">
+  <view class="film-item" v-if="film">
     <view class="top" @click="toDetail(film)">
       <image style="width: 100%" :mode="'aspectFill'" :src="film.poster"
       ></image>
@@ -13,7 +13,7 @@
         </view>
       </view>
       <view class="done">
-        <Favorite v-if="film" :favId='film.id' :favFilmName='film.filmName' :favNum='film.filmHeat' />
+        <Favorite :favId='film.id' :favFilmName='film.filmName' :favNum='film.filmHeat' />
       </view>
     </view>
   </view>
@@ -31,7 +31,8 @@ export default {
     film: Object
   },
   data() {
-    return {
+	  // console.log('film', film);
+    return { 
       avatar: 'https://hbimg.huabanimg.com/2dbbc9177be8b9912b2a0d881200dd47ccb84d92710aa-IepOs1_fw658'
     }
   },

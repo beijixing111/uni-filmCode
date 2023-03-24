@@ -1,17 +1,18 @@
 <template>
   <view class="fav-box">
-    <van-icon @click="onFavorite" size="26px" name="star-o" 
-      :color="isFav ? '#f46b84' : '#ccc'" 
-    />
-    <text class="tnum" v-if="allfavNumber">{{ allfavNumber }}</text>
+    <van-icon @click="onFavorite" size="26px" name="star-o" :color="isFav ? '#f46b84' : '#ccc'"/>
+	<!-- <text @click="onFavorite" v-show="!isFav" class="sty">☆</text>
+	<text @click="onFavorite" v-show="isFav" class="sty-red">★</text>  -->
+    <text class="tnum" v-show="allfavNumber">{{ allfavNumber }}</text>
   </view>
 </template>
 
-<script >
+<script>
 import VanIcon from "@/wxcomponents/@vant/weapp/icon/index";
+// vant ui 在app 开发中不支持 
 export default {
   components:{
-    VanIcon
+    VanIcon 
   },
   props: {
     favId: Number,
@@ -23,7 +24,7 @@ export default {
   },
   data() {
     return { 
-      favNumber: this.favNum || 0
+      favNumber: this.favNum,
     }
   }, 
   computed: {
@@ -40,14 +41,14 @@ export default {
     }
   },
   methods: {
-    getIndex() { 
-      let favoriteList = this.$store.state.favoriteList;
+    getIndex() {  
+      let favoriteList = this.$store.state.favoriteList || [];
       if(favoriteList.length === 0){
         return -1;
       }
       return favoriteList.findIndex(item => item.id === this.favId);
     },
-    onFavorite() { 
+    onFavorite() {
       if(!this.$store.getters.getUserIsLogin){
         return uni.showModal({
           title: '提示',
@@ -84,6 +85,14 @@ $favColor: #f46b84;
     font-size: 32rpx;
     margin-left: 10rpx;
     margin-top: 6rpx;
+  }
+  .sty{
+	  color: #ccc;
+	  font-size: 30px;
+  }
+  .sty-red{
+	  font-size: 30px;
+	color: $favColor;
   }
 }
 

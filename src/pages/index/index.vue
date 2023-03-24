@@ -1,10 +1,13 @@
 <template>
 	<view class="home-view" >
-		<Banner :list="banners" />
+		<Banner :list="banners" v-if="banners.length"/>
 		<!-- <NewProduct /> -->
+		<!-- <view>{{title}}</view> -->
 		<view class="film-container">
-			<view class="hot">热门推荐</view>
-			<view class="film-list">
+			<view class="hot">
+				<text>热门推荐</text>
+			</view>
+			<view class="film-list" v-if="filmList.length">
 				<FilmItem v-for="film in filmList" :film='film' :key="film.id" />
 			</view>
 
@@ -17,15 +20,13 @@
 
 <script>
 	import { homeData, homeBanner } from '@/api/home';
-	import NewProduct from './components/NewProduct';
 	import Banner from './components/Banner';
 	import FilmItem from './components/FilmItem';
 	// const app = getApp();
 	export default {
 		components: {
 			Banner,
-			FilmItem,
-			NewProduct
+			FilmItem
 		},
 		data() {
 			return {
@@ -37,7 +38,12 @@
 			}
 		},
 		onLoad() {
+			console.log("onLoad");
 			this.loadHomeData();
+		},
+		onShow(){
+			// console.log("onShow");
+			// this.loadHomeData();
 		},
 
 		onPullDownRefresh() {

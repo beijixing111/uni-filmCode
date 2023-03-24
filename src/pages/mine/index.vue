@@ -5,7 +5,7 @@
 
 		<view class="group-bg">
 			<van-cell-group >
-				<van-cell size="large" title="收藏" :value="starCount || ''" is-link >
+				<van-cell size="large" title="收藏" :value="starCount" is-link >
 					<van-icon slot="icon" size="18px" name="star-o" color="#f46b84" style="margin-right: 10rpx" />
 				</van-cell>
 				<van-cell size="large" title="扫一扫" @click="handleScan" is-link>
@@ -14,7 +14,11 @@
 				<van-cell size="large" title="设置" @click="goWriteInfo('edit')" is-link >
 					<van-icon slot="icon" size="18px" name="setting-o" color="#f46b84" style="margin-right: 10rpx" />
 				</van-cell>
+				<van-cell size="large" title="壁纸" @click="goToWallpaper" is-link >
+					<van-icon slot="icon" size="18px" name="setting-o" color="#f46b84" style="margin-right: 10rpx" />
+				</van-cell>
 			</van-cell-group>
+			<!-- <button class="btn" @click="goToWallpaper" type="primary" size="small">壁 纸</button> -->
 		</view>
 		
 	</view>
@@ -40,7 +44,6 @@ export default {
 		}
 	},
 	onLoad() {
-		// this.getHomeData();
 		this.getLocalUserInfo(); 
 	},
 	onShow() {
@@ -48,7 +51,7 @@ export default {
 	},
 	computed: {
 		starCount() {
-			return this.$store.getters.getFavoriteTotal;
+			return this.$store.getters.getFavoriteTotal || '';
 		}
 	},
 	methods: { 
@@ -151,6 +154,9 @@ export default {
 					});
 				}
 			});
+		},
+		goToWallpaper(){
+			uni.navigateTo({url: '/wallpaper/pages/home/index'});
 		}
 	}
 }
@@ -166,6 +172,12 @@ export default {
 			margin-top: 30rpx;
 		}
 	}
- 
+	.btn{
+	  background: #f46b84;
+	  line-height: 2;
+	  padding-left: 20rpx;
+	  padding-right: 20rpx;
+	  font-size: 30rpx;
+	}
 
 </style>
