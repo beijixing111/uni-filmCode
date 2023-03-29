@@ -8,13 +8,31 @@
     "app-plus" : {
         /* 5+App特有相关 */
         "usingComponents" : true,
+        "nvueCompiler" : "uni-app",
+        "safearea" : {
+            "bottom" : {
+                "offset" : "none"
+            }
+        },
+		"screenOrientation": ["portrait-primary","portrait-secondary","landscape-primary","landscape-secondary"],
+        "statusbar" : {
+            //可选，JSON对象，应用启动后的系统状态栏相关配置
+            "immersed" : "supportedDevice" //可选，字符串类型，沉浸式状态栏样式，可取值none、suggestedDevice、supportedDevice
+        },
+        // "style": "light", //可选，字符串类型，系统状态栏样式（前景颜色），可取值dark、light
+        // "background": "#RRGGBB" //可选，字符串类型，#RRGGBB格式，系统状态栏背景颜色
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
             "autoclose" : true,
             "delay" : 0
         },
-        "modules" : {},
+        "modules" : {
+            "Camera" : {},
+            "Barcode" : {},
+            "FaceID" : {},
+            "VideoPlayer" : {}
+        },
         /* 模块配置 */
         "distribute" : {
             /* 应用发布信息 */
@@ -45,9 +63,18 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            "ios" : {},
+            "ios" : {
+                "privacyDescription" : {
+                    "NSPhotoLibraryAddUsageDescription" : "获取相册写入权限用户存储图片或视频资源到相册",
+                    "NSCameraUsageDescription" : "获取扫一扫权限用于用户主动扫码获取二维码信息或者二维码地址链接",
+                    "NSPhotoLibraryUsageDescription" : "获取相册读取权限用于用户更换头像和上传分享照片图片展示",
+                    "NSFaceIDUsageDescription" : "获取Face ID将用于app登录"
+                }
+            },
             /* ios打包配置 */
-            "sdkConfigs" : {},
+            "sdkConfigs" : {
+                "geolocation" : {}
+            },
             "icons" : {
                 "android" : {
                     "hdpi" : "unpackage/res/icons/72x72.png",
@@ -81,7 +108,8 @@
                 }
             },
             "splashscreen" : {
-                "useOriginalMsgbox" : true
+                "useOriginalMsgbox" : true,
+                "iosStyle" : "common"
             }
         }
     },

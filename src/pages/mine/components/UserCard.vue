@@ -11,14 +11,6 @@
       <button class="btn" @click="login" v-if="!isLogin" type="primary" size="small">登 录</button>
       <button class="btn" @click="logout" v-else="isLogin" type="primary" size="small">退 出</button>
     </view>
-
-    <!-- <view>
-			<button type="primary" open-type="getUserInfo" 
-			@getuserinfo="getUserInfo">获取用户信息</button>
-
-			<button type="primary" open-type="chooseAvatar" 
-			@chooseavatar="chooseAvatar">获取用户头像</button> 
-		</view> -->
   </view>
 </template>
 

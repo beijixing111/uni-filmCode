@@ -6,7 +6,7 @@
     <view else class='result-other'>
       <view class='result-label'>扫码结果：</view>
       <view class='result-box'>
-        <text class='result-text' user-select>{{result}}</text> 
+        <text class='result-text' selectable>{{result}}</text> 
       </view>  
       <button class="copy-btn" @click="handleCopyUrl" :data-text="result">复制结果</button>
     </view>

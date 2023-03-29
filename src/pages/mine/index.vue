@@ -1,8 +1,10 @@
-<template>
+<template> 
 	<view class="user-center">  
-    <user-card :userInfo="{avatarUrl, nickName}" 
-			@login="onLogin" @logout="onLogOut" />
-
+		<StatusBar :height="statusbarHei" bgColor="#f8f8f8" />
+		<view class="top-panel">
+			<user-card :userInfo="{avatarUrl, nickName}"
+				@login="onLogin" @logout="onLogOut" />
+		</view>
 		<view class="group-bg">
 			<!-- <van-cell-group >
 				<van-cell size="large" title="收藏" :value="starCount" is-link >
@@ -18,9 +20,47 @@
 					<van-icon slot="icon" size="18px" name="setting-o" color="#f46b84" style="margin-right: 10rpx" />
 				</van-cell>
 			</van-cell-group> -->
-			<view style="padding: 10px;">
-				<button class="btn" @click="goToWallpaper" type="primary" size="small">壁 纸</button>
+			<view>
+				<uni-list>
+					<uni-list-item showArrow clickable
+						title="收 藏"
+						:show-extra-icon="true"
+						:extra-icon="{color: '#f46b84',size: '26',type: 'star'}"
+						@click="handleFav" 
+					>
+						<template #footer>
+							<text class="rig-txt">{{starCount}}</text>
+						</template>
+					</uni-list-item>
+					<uni-list-item showArrow clickable
+						title="扫一扫" 
+						:show-extra-icon="true"
+						:extra-icon="{color: '#f46b84',size: '22',type: 'scan'}" 
+						@click="handleScan" 
+					/>
+					<uni-list-item showArrow clickable
+						title="设 置" 
+						:show-extra-icon="true"
+						:extra-icon="{color: '#f46b84',size: '22',type: 'gear'}"
+					/>
+					<uni-list-item showArrow clickable
+						title="壁 纸"   
+						@click="goToWallpaper"
+					/>
+				</uni-list>
 			</view>
+			
+			<!-- <view style="padding: 10px;">
+				<button class="btn"  type="primary" size="small">收藏 {{starCount}}</button>
+			</view>
+			
+			<view style="padding: 10px;">
+				<button class="btn" @click="handleScan" type="primary" size="small">扫一扫</button>
+			</view>
+			<view style="padding: 10px;">
+				<button class="btn" type="primary" size="small"></button>
+			</view> -->
+			
 		</view>
 		
 	</view>
@@ -28,13 +68,14 @@
 
 <script> 
 import UserCard from './components/UserCard';
-// import VanCell from "@/wxcomponents/@vant/weapp/cell/index";
-// import VanCellGroup from  "@/wxcomponents/@vant/weapp/cell-group/index";
-// import VanIcon from "@/wxcomponents/@vant/weapp/icon/index";
+import {logout} from '@/api/user';
+import StatusBar from '@/components/status-bar/index';
+
 export default {
 	name: 'mine',
 	components: {
 		UserCard,
+		StatusBar,
 		// VanCell,
 		// VanCellGroup,
 		// VanIcon
@@ -42,7 +83,8 @@ export default {
 	data() {
 		return {   
 			avatarUrl: '',
-			nickName: ''
+			nickName: '',
+			statusbarHei: 0
 		}
 	},
 	onLoad() {
@@ -50,89 +92,38 @@ export default {
 	},
 	onShow() {
 		this.getLocalUserInfo();
+		this.statusbarHei = getApp().globalData.statusBarHeight;
 	},
 	computed: {
 		starCount() {
 			return this.$store.getters.getFavoriteTotal || '';
 		}
 	},
-	methods: { 
-		getUserInfo(e) {
-			console.log(e);
-			this.user = e.detail.userInfo;
-			console.log(this.user);
-		},  
-		onLogin() { 
-			this.getInfo(); 
-			// this.goWriteInfo();
-		},
-		async getSessionKeyAndOpenid(code) {
-			try{
-
-			}catch(err){
-				console.log(err);
-			}
-		},
-		goSetInfo(data) {
-			if(data.userInfo.nickName === '微信用户'){
-				this.goWriteInfo();
-			}else {
-				this.avatarUrl = data.userInfo.avatarUrl;
-				this.nickName = data.userInfo.nickName;
-				this.$store.commit('login', data.userInfo);
-			}
+	methods: {   
+		onLogin() {  
+			uni.navigateTo({url: '/pages/login/index'});
 		},
 		getLocalUserInfo(){
 			let userInfo = this.$store.state.userInfo;
 			this.avatarUrl = userInfo.avatarUrl || '';
 			this.nickName = userInfo.nickName || ''; 
 		},
-		getInfo() {
-			if(uni.getUserProfile) {
-				uni.getSetting({
-					success: (res) => {
-						console.log(res)
-						if(res.authSetting['scope.userInfo']) {
-							uni.getUserProfile({
-								desc: "页面显示",
-								success: (res) => {
-									this.goSetInfo(res);
-								},
-								complete: (re) => {
-									console.log('getUserProfile', re);
-								}
-							});
-						}
-					}
-				}) 
-				
-			} else {
-				uni.getUserInfo({
-					provider: 'weixin',
-					success: (infoRes) => {
-						// console.log('用户昵称为：', infoRes);
-						this.goSetInfo(infoRes);
-					}
-				});
-			}
-		},
-		goWriteInfo(type = ''){
-			if(type === 'edit'){ 
-				let str = encodeURIComponent(JSON.stringify({avatarUrl: this.avatarUrl, nickName: this.nickName}));
-				type = `?userInfo=${str}`;
-			}
-			uni.navigateTo({
-				url: '/pages/userinfo/index' + type 
-			});
-		},
 		onLogOut() {
 			uni.showModal({
 				content: '确定要退出吗？',
-				success: res => {
+				success: async res => {
 					if (res.confirm) {
-						this.$store.commit('logout');
-						this.avatarUrl = '';
-						this.nickName = '';
+						try{
+							let ress = await logout();
+							// console.log(res);
+							if(ress.errorCode === 0) { 
+								this.$store.commit('logout');
+								this.avatarUrl = '';
+								this.nickName = '';
+							}
+						} catch(err) {
+							console.log(err);
+						}
 					}
 				}
 			})
@@ -140,7 +131,8 @@ export default {
 		handleScan(){
 			uni.scanCode({
 				success: (res) => {
-					console.log(res);
+					console.log('handleScan', res);
+					console.log('条码类型:', res.scanType);
 					let restype = null;
 					let reg = /\.(jpe?g|png|gif)$/i;
 					if (res.result.indexOf('http') !== -1) {
@@ -151,14 +143,26 @@ export default {
 					} else {
 						restype = "other";
 					}
+					let resStr = encodeURIComponent(JSON.stringify(res.result));
+					console.log("resStr", resStr);
 					uni.navigateTo({
-						url: '/pages/scan/index?result=' + encodeURIComponent(res.result) + '&resultType=' + restype
+						url: '/pages/scan/index?result=' + resStr + '&resultType=' + restype
 					});
+				},
+				fail: (err) => {
+					console.log(err);
 				}
 			});
 		},
 		goToWallpaper(){
-			uni.navigateTo({url: '/wallpaper/pages/home/index'});
+			// uni.navigateTo({url: '/wallpaper/pages/home/index'});
+			uni.navigateTo({url: '/pages/nvue/index'});
+		},
+		handleFav() {
+			uni.showToast({
+				title: '开发者',
+				icon: "none"
+			})
 		}
 	}
 }
@@ -166,13 +170,15 @@ export default {
 
 <style lang="scss" scoped>
 	.user-center { 
-		padding: 30rpx 0;
-		min-height: 100vh;
+		height: 100vh;
 		background: #f8f8f8;
-		box-sizing: border-box;
-		.group-bg{ 
+		box-sizing: border-box; 
+		.group-bg{
 			margin-top: 30rpx;
 		}
+	}
+	.top-panel{
+		padding: 30rpx 0;
 	}
 	.btn{
 	  background: #f46b84;
@@ -180,6 +186,11 @@ export default {
 	  padding-left: 20rpx;
 	  padding-right: 20rpx;
 	  font-size: 30rpx;
+	}
+	.rig-txt{
+		display: flex;
+		align-items: center;
+		font-size: 16px; color: #888;
 	}
 
 </style>

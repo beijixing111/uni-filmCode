@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { API_HOST, API_TIME_OUT } from '@/config/http';
 
-console.log('API_HOST', API_HOST);
+// console.log('API_HOST', API_HOST);
 
 const http = axios.create({
   baseURL: API_HOST,
@@ -13,12 +13,30 @@ const http = axios.create({
 http.interceptors.request.use(config => {
   return config;
 }, error => {
+	console.log(error);
   return Promise.reject(error);
 })
 
+const networkErr = () => {
+	uni.showToast({
+		title: "网络异常，请稍后重试！",
+		icon: 'none'
+	});
+}
+
 http.interceptors.response.use(response => {
-  return response.data;
+	console.log(response);
+	if(response.data){
+		return response.data;
+	} else {
+		networkErr();
+		return {};
+	}
 }, error => {
+	// console.log("http response", error);
+	if(error.message === "Network Error"){
+		networkErr();
+	}
   return Promise.reject(error);
 });
 

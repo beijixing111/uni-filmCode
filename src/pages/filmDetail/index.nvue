@@ -1,0 +1,180 @@
+<template>
+	<view class="film-detail">
+		<view class="" id="myTop">
+			<StatusBar :height="statusbarHei" bgColor="#000" />
+			<CustomBack :topVal="statusbarHei" />
+			<view class="video-box">
+				<video id="myVideo" class="my-video" :style="{width: windowWidth + 'px'}" :src="filmData.filmUrl" :poster="filmData.poster"
+					@error="videoErrorCallback" controls show-mute-btn></video>
+			</view>
+		</view>
+		<scroll-view class="film-desc" scroll-y="true" :style="{height: innerHeight + 'px'}">
+			<view class="info-line"> 
+				<view class="userinfo">
+					<image class="img-box" :mode="'aspectFill'" :src="filmData.mimyz_user.avatar || avatar" />
+					<view class="nickname">
+						<span class="nickname-t">{{filmData.mimyz_user.nickName}}</span>
+					</view>
+				</view>
+				<view class="fav-box">
+					<Favorite v-if="filmData" :favId='filmData.id' :favFilmName='filmData.filmName'
+						:favNum='filmData.filmHeat' />
+				</view>
+			</view>
+			<view class="bot-info">
+				<view>
+					<text class="title">名称：{{filmData.filmName}}</text>
+				</view>
+				<view>
+					<text class="p-text">类型：喜剧</text> 
+				</view>
+				<view>
+					<text class="p-text">简介：</text>
+				</view>
+				<view>
+					<text class="p-text">{{filmData.filmDesc || '无'}}</text>
+				</view>
+			</view>
+			
+		</scroll-view>
+	</view>
+</template>
+
+<script>
+	import Favorite from '@/components/favorite/index';
+	import StatusBar from '@/components/status-bar/index';
+	import CustomBack from '@/components/custom-back/index';
+	// const app = getApp();
+	export default {
+		components: {
+			Favorite,
+			StatusBar,
+			CustomBack
+		},
+		data() {
+			return {
+				filmData: null,
+				loading: false,
+				statusbarHei: 0,
+				innerHeight: 100,
+				windowWidth: 375,
+			}
+		},
+		onReady: function(res) {
+			// #ifndef MP-ALIPAY
+			// this.videoContext = uni.createVideoContext('myVideo');
+			// #endif
+
+		},
+		onLoad(option) {
+			this.filmData = JSON.parse(decodeURIComponent(option.detail));
+			console.log(this.filmData);
+			// uni.setNavigationBarTitle({title: this.filmData.filmName + this.filmData.id});
+		},
+		onShow() {
+			this.statusbarHei = getApp().globalData.statusBarHeight;
+			this.windowWidth = getApp().globalData.windowWidth;
+		},
+		mounted(){
+			// let topHei = document.querySelector('#myTop').clientHeight;
+			let vh = getApp().globalData.windowHeight;
+			var query = uni.createSelectorQuery().in(this);  
+			query.select('#myTop').boundingClientRect((data) => {
+				this.innerHeight = vh - data.height;
+				// console.log(vh,  data, this.innerHeight);
+			}).exec();  
+			
+		},
+		methods: {
+			videoErrorCallback: function(e) {
+				uni.showModal({
+					content: e.target.errMsg,
+					showCancel: false
+				})
+			},
+
+		}
+	}
+</script>
+
+<style  scoped>
+	.film-detail {
+		height: 100vh;
+		background: #f8f8f8;
+	}
+	.loading-box {
+		text-align: center;
+		padding: 25rpx 0;
+	}
+
+	.video-box {  
+		/* height: 420rpx; */
+	}
+
+	.info-line{
+		display: flex; justify-content: space-between; 
+		flex-direction: row;
+		padding: 20rpx 0;
+	}
+	.userinfo {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		margin-bottom: 15rpx;
+		flex-direction: row;
+
+	}
+
+	.img-box {
+		width: 70rpx;
+		height: 70rpx;
+		margin-right: 20rpx;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+
+	.nickname {
+		color: #333;
+		font-size: 28rpx;
+
+	}
+
+	.nickname-t {
+		margin-right: 15rpx;
+	}
+
+	.film-desc {
+		padding: 0 20rpx;
+		padding-bottom: 60px;
+		position: relative;
+		height: 600rpx;
+	}
+
+	.title {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: #333;
+		margin-bottom: 10rpx;
+	}
+
+	.fav-box { 
+		display: flex;
+		justify-content: flex-end;
+		flex-direction: row;
+		width: 150rpx;
+		/* align-items: center; */
+	}
+
+	.bot-info{
+		/* display: flex;
+		flex-direction: column; */
+	}
+	.p-text {
+		font-size: 28rpx;
+		color: #888;
+		margin-bottom: 10rpx;
+	}
+	/* // .indent {
+	// 	text-indent: 60rpx;
+	// } */
+</style>

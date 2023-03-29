@@ -2,95 +2,119 @@
 	"easycom": {
 		"autoscan": true,
 		"custom": {
-			// uni-ui 规则如下配置
-			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+			// uni-ui 规则如下配置  排除了uni-shadow-root，uni-icons  
+			"^uni-((?!(shadow-root|icons)).*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
 		}
 	},
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "影视欣赏",
-        "enablePullDownRefresh": true
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "",
+				"navigationBarTextStyle": "black",
+				"navigationStyle": "custom"
 			}
 		},
-    {
+		{
 			"path": "pages/landing/index",
 			"style": {
 				"navigationBarTitleText": "Banner详情页"
 			}
 		},
-    {
+		{
 			"path": "pages/filmDetail/index",
 			"style": {
-				"navigationBarTitleText": "短视频详情"
+				"navigationBarTitleText": "",
+				"navigationBarTextStyle": "white",
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/mine/index",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "",
+				"navigationBarTextStyle": "black",
+				"navigationStyle": "custom"
 			}
 		},
-    { 
-      "path": "pages/userinfo/index",
+		{
+			"path": "pages/userinfo/index",
 			"style": {
 				"navigationBarTitleText": "用户画像"
 			}
-    },
-    { 
-      "path": "pages/scan/index",
+		},
+		{
+			"path": "pages/scan/index",
 			"style": {
 				"navigationBarTitleText": "扫一扫"
 			}
-    }
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"app-plus": {
+					"softinputNavBar": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/nvue/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationBarTextStyle": "white",
+				"navigationStyle": "custom",
+				"disableScroll": true, // 不嵌套 scroller
+				"app-plus": {
+					"titleNView": false, // 禁用原生导航栏
+					"scrollIndicator": "none" // 隐藏滚动条
+				}
+			}
+		}
 	],
-  "subpackages": [
-    {
-      "root": "wallpaper",
-      "pages": [{
-        "path": "pages/home/index",
-        "style": {
-          "navigationBarTitleText": "",
-          "navigationStyle": "custom"
-        }
-      }]
-    }
-  ],
+	"subpackages": [{
+		"root": "wallpaper",
+		"pages": [{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		}]
+	}],
 	"tabBar": {
-    "iconfontSrc":"static/iconfont.ttf",
+		"iconfontSrc": "static/iconfont.ttf",
 		"backgroundColor": "#F8F8F8",
-    "color": "#000000",
-    "selectedColor": "#f46b84",
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/homeSelected.png",
-        "iconfont": {
-          "text": "\ue62e",
-          "selectedText": "\ue62e",
-          "fontSize": "20px",
-          "color": "#000000",
-          "selectedColor": "#f46b84"
-        }
-      },
+		"color": "#000000",
+		"selectedColor": "#f46b84",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/homeSelected.png",
+				"iconfont": {
+					"text": "\ue62e",
+					"selectedText": "\ue62e",
+					"fontSize": "20px",
+					"color": "#000000",
+					"selectedColor": "#f46b84"
+				}
+			},
 			{
-        "pagePath": "pages/mine/index",
-        "text": "我的",
-        "iconPath": "static/tabbar/geren.png",
-        "selectedIconPath": "static/tabbar/gerenSelected.png",
-        "iconfont": {
-          "text": "\ue607",
-          "selectedText": "\ue607",
-          "fontSize": "20px",
-          "color": "#000000",
-          "selectedColor": "#f46b84"
-        }
-      }
-    ]
-  },
+				"pagePath": "pages/mine/index",
+				"text": "我的",
+				"iconPath": "static/tabbar/geren.png",
+				"selectedIconPath": "static/tabbar/gerenSelected.png",
+				"iconfont": {
+					"text": "\ue607",
+					"selectedText": "\ue607",
+					"fontSize": "20px",
+					"color": "#000000",
+					"selectedColor": "#f46b84"
+				}
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

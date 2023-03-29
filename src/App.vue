@@ -1,7 +1,16 @@
 <script>
+	import {getWinAndSysInfo} from './utils/sys.js';
 	export default {
-		onLaunch: function() {
+		globalData: {
+			windowWidth: 0,
+			innerHeight: 0,
+			statusBarHeight: 0,
+			osName: ''
+		},
+		onLaunch: function () {
+			
 			console.log('App Launch')
+			this.getSysInfo();
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -10,11 +19,16 @@
 			console.log('App Hide')
 		},
 		created() {
-			this.getItemList();
+			// this.getItemList();
 		},
 		methods: {
-			getItemList() {
-				console.log("getItemList");
+			async getSysInfo() {
+				let info = await getWinAndSysInfo();
+				// console.log('App info', info)
+				for(let x in info) {
+					this.globalData[x] = info[x];
+				}
+				console.log(this.globalData);
 			}
 		}
 	}

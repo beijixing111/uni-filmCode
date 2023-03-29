@@ -21,7 +21,7 @@
 
 <script> 
 
-import Favorite from '../../components/favorite/index';
+import Favorite from '@/components/favorite/index';
 export default {
   name: 'film-item',
   components: {

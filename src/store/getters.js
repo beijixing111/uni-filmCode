@@ -5,6 +5,6 @@ export default {
     return state.favoriteList.length;
   },
   getUserIsLogin(state) {
-    return !!state.userInfo.nickName || !!state.userInfo.avatarUrl; 
+    return !!state.userInfo.token || !!state.userInfo.nickName; 
   }
 }

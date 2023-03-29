@@ -1,106 +1,79 @@
 <template>
 	<view class="home-view" >
-		<Banner :list="banners" v-if="banners.length"/>
-		<!-- <NewProduct /> -->
-		<!-- <view>{{title}}</view> -->
-		<view class="film-container">
-			<view class="hot">
-				<text>热门推荐</text>
-			</view>
-			<view class="film-list" v-if="filmList.length">
-				<FilmItem v-for="film in filmList" :film='film' :key="film.id" />
-			</view>
-
-		</view>
-		<!-- <button type="primary" @click="onSwitchTab">去个人中心</button>
-		<button @click="getToast">获取提示</button> -->
+		<topTab :tabs="tabs" :statusbarHei="statusbarHei" 
+		:current="current" :duration="300" @change="changeTab" @changeIndex="switchTab" @swiperTransition="swiperTransition">
+			<template #swiper-item0 >
+				<FilmPanel ref="film" :refresherEnabled="!refresherEnabled" />
+			</template>
+			<template #swiper-item1>
+				<WallPaper ref="wallpaper" :refresherEnabled="!refresherEnabled" />
+			</template>
+			<template #swiper-item2>
+				<FuliPanel />
+			</template> 
+		</topTab>
+		
+		<!-- <Banner :list="banners" v-if="banners.length"/> -->
 		
 	</view>
 </template>
 
 <script>
-	import { homeData, homeBanner } from '@/api/home';
-	import Banner from './components/Banner';
-	import FilmItem from './components/FilmItem';
+	import topTab from '@/components/top-tab/index';
+	import FilmPanel from './components/FilmPanel';
+	import WallPaper from './components/WallPaper';
+	import FuliPanel from './components/FuliPanel';
 	// const app = getApp();
 	export default {
 		components: {
-			Banner,
-			FilmItem
+			topTab,
+			FilmPanel,
+			WallPaper,
+			FuliPanel
 		},
 		data() {
 			return {
-				banners: [],
-				filmList: [],
-				loading: false, 
-				pageSize: 10,
-				page: 1
+				statusbarHei: 0,
+				current: 0,
+				tabs: ['影视', '壁纸', '福利'],
+				refresherEnabled: false,
+				// banners: [],
 			}
 		},
 		onLoad() {
-			console.log("onLoad");
-			this.loadHomeData();
+			console.log("onLoad"); 
 		},
 		onShow(){
-			// console.log("onShow");
+			this.statusbarHei = getApp().globalData.statusBarHeight; 
+			console.log("onShow");
 			// this.loadHomeData();
 		},
-
-		onPullDownRefresh() {
-			console.log('开始下拉刷新');
-			this.loadHomeData();
-			setTimeout(() => {
-				console.log('stopPullDownRefresh');
-				uni.stopPullDownRefresh();
-			},2000);
-		},
 		methods: {
-			loadHomeData () {
-				this.getBanner();
-				this.getHomeData(); 
+			
+			switchTab(idx) {
+				// console.log(idx);
+				this.current = idx; 
 			},
-			async getBanner() {
-				try {
-					const res = await homeBanner();
-					if(res.errorCode === 0){
-						this.banners = res.data.list;
-					}
-				} catch(err) {
-					console.log(err);
+			changeTab(e){
+				// console.log(e);
+				this.current = e.detail.current;
+				if(this.current === 0){
+					this.$refs.film.getRequest();
 				}
-				
-			},
-			getToast() {
-				uni.showToast({
-					icon: 'none',
-					title: '测试小酱油！'
-				});
-			},
-			onSwitchTab() {
-				uni.switchTab({
-					url: '/pages/mine/index'
-				});
-			},
-			async getHomeData() {
-				const params = {
-					page: this.page,
-      		pageSize: this.pageSize
-				};
-				const {errorCode, data} = await homeData();
-				if(errorCode === 0) {
-					this.filmList = data.filmList;
+				if(this.current === 1){
+					this.$refs.wallpaper.getRequest();
 				}
-				console.log(this.filmList[0]);
-			},
-			getUserInfo(e) {
-				console.log(e);
-				this.user = e.detail.userInfo;
-				console.log(this.user);
-			},
-			chooseAvatar(e) {
-				console.log(e.detail);
-				this.avatarUrl = e.detail.avatarUrl;
+			}, 
+			swiperTransition(bool){
+				// console.log(bool);
+				this.refresherEnabled = bool;
 			}
+			// onSwitchTab() {
+			// 	uni.switchTab({
+			// 		url: '/pages/mine/index'
+			// 	});
+			// },
+			
 		}
 	}
 </script>
@@ -111,16 +84,6 @@
 		background: #f6f6f6;
 	}
 
-	.film-container{
-		/* padding: 30rpx0; */
-	}
-	.hot{
-		padding: 30rpx;
-		font-size: 32rpx;
-		color: #333;
-		font-weight: bold;
-	}
-
 	.content {
 		display: flex;
 		flex-direction: column;
@@ -128,19 +91,4 @@
 		justify-content: center;
 	}
 
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin: 200rpx auto 50rpx auto;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
 </style>

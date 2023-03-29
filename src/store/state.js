@@ -7,7 +7,7 @@ const userInfo = getLocalUserInfo();
 const state = {
   userInfo: userInfo,
   filmList: [], // 已加载的filmList
-  favoriteList: (userInfo && userInfo.nickName && userInfo.avatarUrl) ? getFavoriteList() : []
+  favoriteList: (userInfo && userInfo.nickName) ? getFavoriteList() : []
 }
 
 export default state;

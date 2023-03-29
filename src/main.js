@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App'
-import store from './store/index'
+import store from './store/index' 
+import '@dcloudio/uni-ui/lib/uni-icons/uniicons.ttf';
 
 Vue.config.productionTip = false
 

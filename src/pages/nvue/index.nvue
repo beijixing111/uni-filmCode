@@ -1,0 +1,134 @@
+<template>
+	<view class="wallpaper" :style="{width: innerWidth + 'px', height: innerHeight + 'px'}">
+		<image :src="imgUrl" mode="aspectFill" class="img"></image>
+		<CustomBack :topVal="top" />
+		<!-- <view class="back" @tap="goBack" :style="{top: top + 'px'}">
+			<uni-icons type="back" size="30" color="#888" />
+		</view> -->
+		<view class="fixed-box">
+			<button type="default" class="download-paper" :loading="loading" plain @click="savePic"><text class="text">下 载</text></button>
+		</view>
+	</view>
+</template>
+
+<script>
+	import CustomBack from '@/components/custom-back/index';
+	export default {
+		components: {
+			CustomBack
+		},
+		data() {
+			return {
+				innerWidth: 0,
+				innerHeight: 0,
+				top: 0,
+				loading: false,
+				// imgUrl: 'https://s1.ax1x.com/2023/03/25/ppDp8Hg.png',
+				imgUrl: 'https://s3.bmp.ovh/imgs/2023/02/08/714a1efeb76cd58c.png' 
+			}
+		},
+		onLoad(option){
+			this.setPageSty(); 
+			console.log(option.picUrl);
+			if(option && option.picUrl) {
+				this.imgUrl = decodeURIComponent(option.picUrl);
+			}
+		}, 
+		methods: {
+			setPageSty() {
+				// console.log('globalData', getApp().globalData.windowWidth);
+				let obj = getApp().globalData;
+				// console.log('globalData', obj);
+				this.innerWidth = obj.windowWidth;
+				this.innerHeight = obj.windowHeight;
+				this.top = obj.statusBarHeight + 5;
+			},
+			goBack() {
+				uni.navigateBack();
+			},
+			savePic(){
+				let info = getApp().globalData;;
+				// console.log("info", info);
+				let osName = info.osName;
+				if(osName === 'ios') { 
+					this.loading = true;
+					uni.saveImageToPhotosAlbum({
+						filePath: this.imgUrl,
+						success: () => {
+							// console.log('save success');
+							this.loading = false;
+							uni.showToast({
+								title: "保存成功！"
+							});
+						},
+						fail: () => {
+							// console.log('save fail');
+							this.loading = false;
+							const appAuthorizeSetting = uni.getAppAuthorizeSetting();
+							if(appAuthorizeSetting.albumAuthorized === 'denied'){
+								uni.showModal({
+								  title: '提示',
+								  content: '尚未开启相册写入权限，是否前往设置中心开启相册权限？',
+								  confirmText: "去设置",
+								  success: res => {
+								    if (res.confirm) {
+										uni.openAppAuthorizeSetting({
+											success (res) {
+												console.log(res);
+										    }
+										})
+								    }
+								  }
+								});
+							}
+						},
+					});
+				}
+			}
+		}
+	}
+</script>
+
+<style>
+.wallpaper{
+	display: flex;
+	flex: 1;
+}
+.img{
+	display: flex;
+	flex: 1;
+}
+.back{
+	position: fixed;
+	left: 40rpx;
+	z-index: 5;
+	/* background: rgba(255,255,255,0.75);  */
+	/* transform: rotate(45deg); */
+	border: 4rpx solid rgba(255,255,255,0.75);
+	/* border-right-width: 0; */
+	/* border-top-width: 0; */
+	width: 70rpx;
+	height: 70rpx;
+	border-radius: 35rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.fixed-box{
+	position: fixed;
+	bottom: 40rpx;
+	left: 0;
+	right: 0;
+	z-index: 5;
+	padding: 10rpx 50rpx;
+}
+.download-paper{
+	border-radius: 50%;
+	background-color: rgba(244,107,132,0.65);
+}
+.text{
+	color: #fff;
+	font-size: 20px;
+	padding: 20rpx;
+}
+</style>
